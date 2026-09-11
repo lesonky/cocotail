@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#07080d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>便利店调酒 · 速查手册</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+:root{
+  --bg:#07080d;
+  --card:rgba(255,255,255,.045);
+  --card2:rgba(255,255,255,.08);
+  --line:rgba(255,255,255,.085);
+  --line2:rgba(255,255,255,.16);
+  --tx:#f3f4f9;
+  --tx2:#9ba1b4;
+  --tx3:#676d81;
+  --accent:#8b7cff;
+  --accent2:#4dd6ff;
+  --radius:18px;
+  --safe:env(safe-area-inset-bottom,0px);
+}
+body{
+  background:var(--bg);
+  color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  line-height:1.6;
+  font-size:15px;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+body.lock{overflow:hidden}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.5;pointer-events:none;z-index:0;will-change:transform}
+.orb.a{width:340px;height:340px;background:#4b3bff;top:-120px;left:-90px;animation:f1 18s ease-in-out infinite}
+.orb.b{width:300px;height:300px;background:#ff3d8b;top:180px;right:-130px;opacity:.35;animation:f2 22s ease-in-out infinite}
+.orb.c{width:280px;height:280px;background:#00c9a7;bottom:-100px;left:-80px;opacity:.22;animation:f1 26s ease-in-out infinite reverse}
+@keyframes f1{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,60px)}}
+@keyframes f2{0%,100%{transform:translate(0,0)}50%{transform:translate(-50px,40px)}}
+.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 16px calc(120px + var(--safe))}
+
+/* ---------- hero ---------- */
+header{padding:38px 0 22px}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;letter-spacing:.14em;color:var(--tx3);text-transform:uppercase;border:1px solid var(--line2);padding:5px 11px;border-radius:999px;margin-bottom:18px}
+.eyebrow i{width:5px;height:5px;border-radius:50%;background:var(--accent2);box-shadow:0 0 8px var(--accent2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+h1{margin:0;font-size:38px;line-height:1.1;font-weight:800;letter-spacing:-.02em;
+  background:linear-gradient(102deg,#fff 8%,#b9b2ff 42%,#5fe3ff 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{margin:12px 0 0;color:var(--tx2);font-size:13.5px;max-width:26em}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:22px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 10px;text-align:center;backdrop-filter:blur(12px)}
+.stat b{display:block;font-size:21px;font-weight:800;letter-spacing:-.02em;background:linear-gradient(90deg,#fff,#a99cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font-size:11px;color:var(--tx3);letter-spacing:.03em}
+
+/* ---------- formula ---------- */
+.formula{margin-top:26px;background:linear-gradient(140deg,rgba(139,124,255,.16),rgba(77,214,255,.07));border:1px solid rgba(139,124,255,.28);border-radius:var(--radius);padding:18px}
+.formula h2{margin:0 0 4px;font-size:14px;font-weight:700;letter-spacing:.01em}
+.formula .eq{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:14px 0 10px;font-size:12.5px}
+.tok{background:rgba(255,255,255,.1);border:1px solid var(--line2);border-radius:9px;padding:6px 10px;white-space:nowrap}
+.tok.hl{background:linear-gradient(120deg,rgba(139,124,255,.5),rgba(77,214,255,.35));border-color:transparent;font-weight:600}
+.eq i{color:var(--tx3);font-style:normal;font-size:13px}
+.formula p{margin:0;font-size:12.5px;color:var(--tx2)}
+.formula p b{color:#cfc7ff;font-weight:600}
+
+/* ---------- toolbar ---------- */
+.toolbar{position:sticky;top:0;z-index:30;margin:26px -16px 0;padding:11px 16px 10px;background:rgba(7,8,13,.78);backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--line)}
+.searchrow{display:flex;gap:9px}
+.sbox{flex:1;position:relative}
+.sbox svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.4}
+input[type=search]{width:100%;height:42px;padding:0 34px 0 36px;font-size:15px;font-family:inherit;color:var(--tx);background:var(--card);border:1px solid var(--line);border-radius:12px;outline:none;-webkit-appearance:none;appearance:none}
+input[type=search]::placeholder{color:var(--tx3)}
+input[type=search]:focus{border-color:rgba(139,124,255,.5);background:var(--card2)}
+.clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:26px;height:26px;border:0;background:transparent;color:var(--tx3);font-size:17px;line-height:1;cursor:pointer;display:none}
+.clr.on{display:block}
+.chips{display:flex;gap:7px;overflow-x:auto;margin-top:10px;padding-bottom:2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;padding:7px 13px;font-size:12.5px;font-family:inherit;color:var(--tx2);background:var(--card);border:1px solid var(--line);border-radius:999px;cursor:pointer;transition:.18s;white-space:nowrap;min-height:34px}
+.chip:active{transform:scale(.95)}
+.chip.on{color:#fff;font-weight:600;border-color:transparent;background:linear-gradient(120deg,var(--accent),#5f8cff);box-shadow:0 4px 18px -6px var(--accent)}
+
+/* ---------- list ---------- */
+.count{margin:16px 0 10px;font-size:12px;color:var(--tx3);display:flex;justify-content:space-between;align-items:center}
+.grid{display:grid;grid-template-columns:1fr;gap:11px}
+@media(min-width:620px){.grid{grid-template-columns:1fr 1fr}}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px 13px;cursor:pointer;overflow:hidden;transition:transform .16s,border-color .16s,background .16s;animation:in .42s cubic-bezier(.2,.8,.3,1) backwards}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:3px;border-radius:0 3px 3px 0;background:var(--c);box-shadow:0 0 14px var(--c)}
+.card:active{transform:scale(.982);background:var(--card2);border-color:var(--line2)}
+.card-h{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-left:11px;padding-right:32px}
+.card-h h3{margin:0;font-size:15.5px;font-weight:700;letter-spacing:-.01em}
+.card-h .nm{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.lv{display:flex;gap:2.5px;align-items:center;flex:0 0 auto;padding-top:5px}
+.lv i{width:4px;height:11px;border-radius:2px;background:rgba(255,255,255,.13)}
+.lv i.f{background:var(--c);box-shadow:0 0 6px var(--c)}
+.ratio{margin:7px 0 0 11px;font-size:13px;font-weight:600;color:var(--c)}
+.taste{margin:7px 0 0 11px;font-size:12.5px;color:var(--tx2);line-height:1.55}
+.card-f{display:flex;align-items:center;gap:7px;margin:11px 0 0 11px;flex-wrap:wrap}
+.tag{font-size:10.5px;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,.06);color:var(--tx3);border:1px solid var(--line)}
+.tag.hot{background:rgba(255,80,120,.16);color:#ff8098;border-color:rgba(255,80,120,.28)}
+.tag.easy{background:rgba(0,201,167,.14);color:#4fe0c0;border-color:rgba(0,201,167,.26)}
+.tag.warn{background:rgba(255,178,60,.14);color:#ffc466;border-color:rgba(255,178,60,.26)}
+.price{margin-left:auto;font-size:12px;color:var(--tx3);font-weight:600}
+.fav{position:absolute;right:9px;top:9px;width:32px;height:32px;border:0;background:transparent;cursor:pointer;display:grid;place-items:center;z-index:2}
+.fav svg{width:17px;height:17px;fill:none;stroke:var(--tx3);stroke-width:1.7;transition:.2s}
+.fav.on svg{fill:#ff4d7d;stroke:#ff4d7d;transform:scale(1.12)}
+.empty{text-align:center;padding:60px 20px;color:var(--tx3);font-size:13.5px}
+
+/* One shared atlas: 6 columns × 10 rows, 160px per cell. */
+.drink-art{display:block;flex:0 0 auto;width:64px;height:64px;border-radius:12px;background-color:#10121b;background-image:url('assets/cocktails-sprite.webp');background-repeat:no-repeat;background-size:600% 1000%}
+.card-title{flex:1;min-width:0}
+.card-title .lv{margin-top:6px}
+.sheet-hero{display:flow-root}
+.sheet-hero .drink-art{float:right;width:96px;height:96px;margin:0 0 12px 14px;border-radius:16px}
+
+/* ---------- sections ---------- */
+section.blk{margin-top:40px}
+.blk h2{font-size:17px;font-weight:700;margin:0 0 4px;letter-spacing:-.01em}
+.blk .lead{font-size:12.5px;color:var(--tx3);margin:0 0 14px}
+.tips{display:grid;gap:9px}
+.tip{display:flex;gap:11px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px}
+.tip b{flex:0 0 22px;height:22px;border-radius:7px;background:linear-gradient(135deg,var(--accent),#4d8cff);font-size:11.5px;display:grid;place-items:center;color:#fff}
+.tip div{font-size:12.5px;color:var(--tx2);line-height:1.6}
+.tip div strong{color:var(--tx);font-weight:600;display:block;margin-bottom:1px;font-size:13px}
+.shop{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.shopc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px}
+.shopc h4{margin:0 0 7px;font-size:12.5px;font-weight:700}
+.shopc ul{margin:0;padding-left:15px;font-size:12px;color:var(--tx2);line-height:1.75}
+footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);font-size:11.5px;color:var(--tx3);line-height:1.8;text-align:center}
+
+/* ---------- fab ---------- */
+.fabs{position:fixed;right:16px;bottom:calc(20px + var(--safe));z-index:40;display:flex;flex-direction:column;gap:9px;align-items:flex-end}
+.fab{height:48px;padding:0 19px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(20,21,32,.86);backdrop-filter:blur(16px);color:#fff;font-family:inherit;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 10px 32px -10px rgba(0,0,0,.9);transition:.18s}
+.fab:active{transform:scale(.94)}
+.fab.pri{background:linear-gradient(120deg,var(--accent),#4d8cff);border-color:transparent;box-shadow:0 10px 30px -8px rgba(110,100,255,.8)}
+.fab.top{width:48px;padding:0;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s,transform .18s}
+.fab.top.on{opacity:1;pointer-events:auto}
+.fab svg{width:17px;height:17px}
+
+/* ---------- sheet ---------- */
+.backdrop{position:fixed;inset:0;background:rgba(3,4,8,.72);backdrop-filter:blur(6px);z-index:50;opacity:0;pointer-events:none;transition:opacity .28s}
+.backdrop.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:60;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#0e0f17;border:1px solid var(--line2);border-bottom:0;border-radius:26px 26px 0 0;transform:translateY(101%);transition:transform .36s cubic-bezier(.22,1,.3,1);padding:0 20px calc(34px + var(--safe));overscroll-behavior:contain}
+.sheet.on{transform:translateY(0)}
+.grab{position:sticky;top:0;background:#0e0f17;padding:11px 0 9px;margin:0 -20px;display:flex;justify-content:center;z-index:2}
+.grab i{width:38px;height:4px;border-radius:2px;background:rgba(255,255,255,.2)}
+.sheet-hero{margin:6px 0 0;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.sheet-hero h3{margin:0;font-size:23px;font-weight:800;letter-spacing:-.02em;line-height:1.25}
+.sheet-hero .cat{display:inline-block;margin-top:8px;font-size:11px;padding:4px 9px;border-radius:7px;background:rgba(255,255,255,.07);color:var(--tx3);border:1px solid var(--line)}
+.sheet-hero .rt{margin:13px 0 0;font-size:15px;font-weight:700;color:var(--c)}
+.sheet-hero .tt{margin:9px 0 0;font-size:13.5px;color:var(--tx2);line-height:1.65}
+.sheet-hero .pills{display:flex;gap:7px;margin-top:13px;flex-wrap:wrap}
+.sheet h4{font-size:12px;letter-spacing:.1em;color:var(--tx3);text-transform:uppercase;margin:22px 0 10px;font-weight:600}
+.sheet ol,.sheet ul{margin:0;padding-left:19px}
+.sheet li{font-size:14px;color:var(--tx);line-height:1.75;margin-bottom:7px;padding-left:2px}
+.sheet li::marker{color:var(--accent);font-weight:700}
+.sheet .ing li{list-style:none;position:relative;padding-left:15px;color:var(--tx2);font-size:13.5px}
+.sheet .ing li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:2px;background:var(--accent);opacity:.6}
+.sheet .ing{margin:0;padding:0}
+.sheet .note{margin-top:20px;background:rgba(255,255,255,.05);border-left:3px solid var(--accent);border-radius:0 12px 12px 0;padding:12px 14px;font-size:12.5px;color:var(--tx2);line-height:1.65}
+.sheet-actions{display:flex;gap:9px;margin-top:22px}
+.sheet-actions button{flex:1;height:46px;border-radius:13px;border:1px solid var(--line2);background:var(--card);color:var(--tx);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:.16s}
+.sheet-actions button:active{transform:scale(.97)}
+.sheet-actions button.pri{background:linear-gradient(120deg,var(--accent),#4d8cff);border-color:transparent}
+</style>
+<link rel="stylesheet" href="cart.css">
+</head>
+<body>
+<div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow"><i></i>2026 微醺指南</span>
+    <h1>便利店调酒</h1>
+    <p class="sub">不用雪克壶、不用量酒器。走进楼下任何一家便利店，买一个冰杯、一瓶迷你基酒、一瓶饮料，三分钟就是一杯特调。</p>
+    <div class="stats">
+      <div class="stat"><b id="s1">0</b><span>款配方</span></div>
+      <div class="stat"><b id="s2">0</b><span>分钟搞定</span></div>
+      <div class="stat"><b id="s3">0</b><span>元以内</span></div>
+    </div>
+  </header>
+
+  <div class="formula">
+    <h2>万能公式</h2>
+    <div class="eq">
+      <span class="tok hl">冰杯</span><i>+</i>
+      <span class="tok hl">迷你基酒</span><i>+</i>
+      <span class="tok">饮料</span><i>+</i>
+      <span class="tok">冰块</span>
+    </div>
+    <p>默认比例 <b>基酒 1 : 饮料 3 : 冰块 3</b>（一杯 280ml 约等于 30 : 150 : 100）。甜了加茶或加酒，淡了加果汁。<b>冰块越多化得越慢，口感越稳。</b></p>
+  </div>
+
+  <div class="toolbar">
+    <div class="searchrow">
+      <div class="sbox">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="q" placeholder="搜酒名、材料，比如「柠檬茶」" autocomplete="off">
+        <button class="clr" id="clr">&times;</button>
+      </div>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="count"><span id="cnt"></span><span id="hint">点卡片看步骤</span></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">
+    没找到这杯，换个关键词？<br>比如「养乐多」「乌龙茶」「椰汁」
+  </div>
+
+  <section class="blk">
+    <h2>便利店采购清单</h2>
+    <p class="lead">新手照着买，一次囤够一周的量</p>
+    <div class="shop">
+      <div class="shopc">
+        <h4>基酒（迷你装 50ml）</h4>
+        <ul>
+          <li>伏特加 · 万能底，兑什么都行</li>
+          <li>白朗姆 · 自带甘蔗甜香</li>
+          <li>金酒 · 植物香气，配气泡水</li>
+          <li>威士忌 · 烟熏麦香，配茶配可乐</li>
+          <li>龙舌兰 · 配西柚、橙汁</li>
+        </ul>
+      </div>
+      <div class="shopc">
+        <h4>利口酒 &amp; 果酒</h4>
+        <ul>
+          <li>百利甜 · 奶油味，配奶配茶</li>
+          <li>野格 · 草药味，配红牛配桃子气泡水</li>
+          <li>真露 · 烧酒，配水溶 C 配椰汁</li>
+          <li>梅见 / 青梅酒 · 配雪碧配乌龙茶</li>
+          <li>果立方 · 配果汁配元气森林</li>
+        </ul>
+      </div>
+      <div class="shopc">
+        <h4>饮料</h4>
+        <ul>
+          <li>维他柠檬茶 · 出镜率第一</li>
+          <li>农夫水溶 C（柠檬 / 青柠 / 西柚 / 血橙）</li>
+          <li>元气森林气泡水、雪碧、汤力水、苏打水</li>
+          <li>三得利乌龙茶、东方树叶茉莉花茶</li>
+          <li>养乐多、旺仔牛奶、椰汁</li>
+        </ul>
+      </div>
+      <div class="shopc">
+        <h4>灵魂配角</h4>
+        <ul>
+          <li>冰杯 · 3 块钱，整杯的灵魂</li>
+          <li>青柠 / 柠檬 · 解腻提香</li>
+          <li>薄荷叶 · 莫吉托必备</li>
+          <li>话梅、葡萄棒冰、冰淇淋</li>
+          <li>稠酸奶 · 做分层用</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk">
+    <h2>避坑指南</h2>
+    <p class="lead">这 8 条能让你少翻 90% 的车</p>
+    <div class="tips">
+      <div class="tip"><b>1</b><div><strong>冰要满杯</strong>冰块越多融化越慢，酒体不会被稀释成水。没有碎冰就把冰块装保鲜袋，用擀面杖敲。</div></div>
+      <div class="tip"><b>2</b><div><strong>青柠别压太狠</strong>白皮部分会出苦汁。柠檬片记得去籽，籽泡久了也发苦。</div></div>
+      <div class="tip"><b>3</b><div><strong>气泡水沿杯壁倒</strong>或者拿吧勺挡一下，直接冲进液面气泡全跑光。</div></div>
+      <div class="tip"><b>4</b><div><strong>分层酒别搅拌</strong>石榴糖浆、蓝橙力娇这类密度大的沉底，倒完直接喝才有层次。</div></div>
+      <div class="tip"><b>5</b><div><strong>先喝掉几口再插酒瓶</strong>整瓶怼进饮料瓶容易溢出来，桌面变黏很麻烦。</div></div>
+      <div class="tip"><b>6</b><div><strong>柠檬茶别选太甜的</strong>低糖款更能留住酒的风味，全糖会把一切盖平。</div></div>
+      <div class="tip"><b>7</b><div><strong>一次别混超过三种酒</strong>混得越多越容易上头，第二天的账很难还。</div></div>
+      <div class="tip"><b>8</b><div><strong>冰杯等太久就别喝了</strong>调完即时喝，冰化完之后味道会直线下降。</div></div>
+    </div>
+  </section>
+
+  <footer>
+    饮酒适量，微醺最美 · 未成年人禁止饮酒 · 喝酒不开车<br>
+    配方整理自下厨房、小红书、抖音等公开分享，口味因人而异，比例可按喜好自由调整。
+  </footer>
+</div>
+
+<div class="fabs">
+  <button class="fab" id="cartBtn" aria-label="查看购物车">购物车 <span id="cartCount">0</span></button>
+  <button class="fab top" id="toTop" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </button>
+  <button class="fab pri" id="rand">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+    摇一杯
+  </button>
+</div>
+
+<div class="backdrop" id="bd"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="grab"><i></i></div>
+  <div id="sheetBody"></div>
+</div>
+
+<script>
+var CATS = {
+  vodka:  {n:'伏特加', c:'#8fa0ff'},
+  rum:    {n:'朗姆',   c:'#ffb26b'},
+  gin:    {n:'金酒',   c:'#4fd8b0'},
+  whisky: {n:'威士忌', c:'#ff8f5e'},
+  tequila:{n:'龙舌兰', c:'#ffd166'},
+  fruit:  {n:'果酒 · 烧酒', c:'#ff7ab8'},
+  liqueur:{n:'利口酒', c:'#b79cff'},
+  zero:   {n:'无酒精', c:'#5fd4ff'}
+};
+
+/* [名称, 分类, 配比, 材料[], 步骤[], 点评, 强度1-3, 约价, 热门] */
+var R = [
+['柠檬茶伏特加','vodka','伏特加 1 : 维他柠檬茶 3',
+ ['迷你伏特加 50ml','维他柠檬茶 250ml','便利店冰杯'],
+ ['柠檬茶先喝掉三分之一，腾出空间','在瓶口剪一个瓶盖大的缺口，整瓶伏特加怼进去','摇匀后等一分钟，让茶味和酒融合'],
+ '人称 mini 版长岛冰茶。柠檬茶的酸甜盖住八成酒味，但后劲不小，酒量在线再冲。',3,'¥20',1],
+
+['绝对日落','vodka','橙汁 7 分满 + 伏特加 1 瓶 + 葡萄气泡水补满',
+ ['冰杯','橙汁','绝对伏特加 50ml','元气森林葡萄味气泡水'],
+ ['冰杯里倒橙汁至七分满','加入整瓶伏特加','葡萄气泡水补满，别搅拌'],
+ '入口先是橙子，随后葡萄和伏特加一起上来。颜色从橙到紫，落日沉进橘色的海。',2,'¥24',0],
+
+['占有欲','vodka','水溶 C 柠檬 7 分满 + 伏特加 + 葡萄汁补满',
+ ['冰杯','农夫水溶 C 柠檬味','绝对伏特加 50ml','味全每日葡萄汁'],
+ ['冰杯加水溶 C 至七分满','加入整瓶伏特加','葡萄汁补满，轻轻提拉两下'],
+ '葡萄味非常浓郁，层次丰富。适合一个人的独处时光，微醺得恰到好处。',2,'¥25',0],
+
+['想念','vodka','伏特加 + 茉莉花茶一半 + 血橙水溶 C 补满',
+ ['冰杯','绝对伏特加 50ml','东方树叶茉莉花茶','农夫水溶 C 血橙味'],
+ ['冰杯里先加伏特加','倒茉莉花茶至杯子一半','血橙水溶 C 补满'],
+ '淡淡的茉莉花香配一点茶感，是这一批里最温柔的一杯。',1,'¥25',0],
+
+['螺丝起子','vodka','伏特加 1 : 橙汁 3',
+ ['伏特加 30ml','橙汁 90ml','冰块'],
+ ['杯里加满冰','倒入伏特加','橙汁补满，搅匀'],
+ '最简单的入门款，橙汁把酒精藏得干干净净，第一次调酒就从它开始。',1,'¥15',0],
+
+['莓桃伏特加','vodka','伏特加 1 : 莓桃汁 2 + 冰块',
+ ['伏特加 30ml','莓桃复合果汁 60ml','冰块'],
+ ['冰杯加满冰','倒伏特加','莓桃汁补满，搅匀'],
+ '伏特加的烈被莓桃的酸甜完美中和，酸甜初恋杀，一口回到十八岁。',2,'¥18',0],
+
+['伏特加梦龙','vodka','伏特加 + 梦龙冰淇淋',
+ ['伏特加 40ml','梦龙冰淇淋 1 支','冰杯'],
+ ['冰杯里倒伏特加','把整支冰淇淋插进去','等它化掉三分之一再喝'],
+ '进口的刺激感和冰淇淋的绵密碰撞，冰火两重天，夏天的野路子吃法。',2,'¥32',0],
+
+['养乐多伏特加','vodka','乳酸菌 6 : 伏特加 4（想上头改 5:5）',
+ ['养乐多 2 瓶','伏特加 30ml','冰块'],
+ ['冰杯加冰','倒入养乐多','加伏特加，搅匀'],
+ '乳酸菌藏酒味的能力一流，好喝到容易忘记它是酒，别当饮料灌。',2,'¥16',0],
+
+['自由古巴','rum','朗姆 1 : 可乐 3 + 半个青柠',
+ ['白朗姆 30ml','可乐 90ml','青柠半个','冰杯'],
+ ['冰杯加满冰','倒入白朗姆','可乐补满，挤入青柠汁并把青柠角丢进去'],
+ '青柠是分水岭。没有它，这就只是朗姆兑可乐。',2,'¥18',1],
+
+['简易莫吉托','rum','雪碧 4 : 朗姆 1 + 薄荷叶',
+ ['雪碧','白朗姆 50ml','薄荷叶 8 片','青柠'],
+ ['薄荷叶在手心拍醒，放进杯底','加满冰，倒朗姆','雪碧补满，插吸管'],
+ '一口清爽的 mojito，是夏日海边的味道。薄荷别捣碎，拍醒就够。',1,'¥20',1],
+
+['迈阿密海滩','rum','白朗姆 40ml + 养乐多 1 瓶 + 柠檬水溶 C 至 7 分满 + 葡萄气泡水补满',
+ ['冰杯','百加得白朗姆 40-50ml','养乐多 1 瓶','水溶 C 柠檬味','葡萄气泡水'],
+ ['冰杯里倒白朗姆','加一整瓶养乐多','水溶 C 倒到七分满','葡萄气泡水补满'],
+ '柠檬、葡萄和养乐多的三重碰撞，入口柔和，粉粉的一杯，下午茶时间的微醺首选。',1,'¥28',1],
+
+['想见你','rum','西柚水溶 C 7 分满 + 白朗姆 + 葡萄气泡水补满',
+ ['冰杯','西柚水溶 C','百加得白朗姆 50ml','葡萄气泡水'],
+ ['冰杯倒西柚水溶 C 至七分满','加整瓶白朗姆','葡萄气泡水补满'],
+ '西柚的微苦回甘，一杯温柔的粉色特调，就是想见你时候的那种愉悦。',1,'¥24',0],
+
+['烧烤局','rum','朗姆酒 1 : 水溶西柚 3',
+ ['朗姆酒 30ml','水溶 C 西柚 90ml','冰杯'],
+ ['冰杯加冰','倒朗姆','水溶 C 补满搅匀'],
+ '西柚的酸涩配朗姆的甘蔗甜，一秒到热带海岛，配烤肉最解腻。',2,'¥18',0],
+
+['椰林飘香','rum','椰汁 2 : 菠萝汁 2 : 朗姆 1',
+ ['椰汁 80ml','菠萝汁 80ml','白朗姆 40ml','冰杯'],
+ ['全部材料倒进冰杯','加满冰，摇匀'],
+ '椰香和菠萝的清甜中和了酒精的浓烈，仿佛一秒穿越到海边。',2,'¥22',0],
+
+['葡萄乌龙朗姆','rum','乌龙茶 2 : 葡萄汁 2 : 朗姆 1',
+ ['三得利乌龙茶 60ml','葡萄汁 60ml','朗姆酒 30ml','冰杯'],
+ ['冰杯加冰','乌龙茶和葡萄汁按 2:2 倒入','最后加朗姆，搅匀'],
+ '葡萄的甜、乌龙的清香、朗姆的蔗香三线并进，层次最丰富的一杯。',2,'¥20',0],
+
+['简易金汤力','gin','汤力水 + 金酒 + 青柠角',
+ ['汤力水 150ml','添加利金酒 50ml','青柠角','冰杯'],
+ ['冰杯里放青柠角，用勺子轻压出汁','倒入金酒','沿杯壁补满汤力水，轻轻提拉冰块'],
+ '便利店版 G&T。气泡是灵魂，挤完汁把青柠皮一起丢进去，香气翻倍。',2,'¥25',1],
+
+['柠檬气泡水金酒','gin','柠檬气泡水 4 : 金酒 1',
+ ['柠檬气泡水','金酒 40ml','冰杯'],
+ ['冰杯加满冰','倒金酒','柠檬气泡水补满'],
+ '一杯便利店版金菲士，清新王炸。二十几度的天气穿小裙子拎着它，氛围感拉满。',1,'¥20',0],
+
+['茉莉乌龙金酒','gin','水溶 C 2 : 茉莉乌龙 2 : 金酒 1',
+ ['水溶 C 柠檬味 60ml','茉莉乌龙茶 60ml','金酒 30ml','冰杯'],
+ ['冰杯加冰','水溶 C 和茉莉乌龙各倒一半','加金酒，轻搅'],
+ '茶香混着微弱的酒精，层次丰富但一点都不烈，非常解渴。',1,'¥22',0],
+
+['葡萄小甜水','gin','金酒 1 : 葡萄汁 2 + 半瓶养乐多',
+ ['金酒 30ml','葡萄汁 60ml','养乐多半瓶','冰杯'],
+ ['冰杯加冰','倒金酒和葡萄汁','加半瓶养乐多搅匀'],
+ '酸甜果香和奶香融合，入口像在喝带酒精的果汁，女生基本都会爱上。',1,'¥20',0],
+
+['橙汁汽水金酒','gin','橙汁汽水 3 : 金酒 1',
+ ['橙汁汽水','金酒 30ml','冰块'],
+ ['杯里加满冰','倒金酒','橙汁汽水补满'],
+ '清新系金酒遇上爆爽橙汁汽水，被完美征服，只剩一点点微涩的酒感。',1,'¥18',0],
+
+['可乐桶','whisky','威士忌 1 : 可乐 3',
+ ['威士忌 30ml','可乐 200ml','冰杯','柠檬片（可选）'],
+ ['冰杯里倒入威士忌','沿杯壁缓慢倒可乐至八分满','轻轻晃动三五秒，放柠檬片'],
+ '零翻车之王。可乐的甜和气泡中和了威士忌的浓烈，但整体酒气被藏住了，后劲大。',2,'¥22',1],
+
+['冻龄威士忌茶','whisky','冰柠檬茶 5 : 威士忌 1',
+ ['维他柠檬茶 200ml','威士忌 40ml','冰杯'],
+ ['冰杯倒威士忌','柠檬茶补满','搅匀'],
+ '冲这个吉祥话也得喝一杯。加班狗的深夜慰藉，茶味压住威士忌的张扬。',2,'¥20',0],
+
+['嗨棒（放松局）','whisky','威士忌 1 : 苏打气泡水 3',
+ ['威士忌 30ml','苏打气泡水 90ml','冰杯'],
+ ['冰杯加满冰','倒威士忌','沿吧勺或杯壁补满苏打水'],
+ '经典居酒屋嗨棒，气泡把威士忌的冲劲拉平，酒吧味在家轻松复刻。',2,'¥20',0],
+
+['威士忌椰子水','whisky','威士忌 1 : 椰子水 3',
+ ['威士忌 30ml','椰子水 90ml','冰杯'],
+ ['椰子水先喝掉两三口','倒威士忌进去','轻晃混合'],
+ '透明的奶香威士忌，清爽得不像在喝酒。椰子水的比例一定要高。',2,'¥22',0],
+
+['威士忌阿华田','whisky','威士忌 1 : 阿华田 3',
+ ['威士忌 30ml','阿华田特浓可可 90ml','冰杯'],
+ ['冰杯加冰','倒威士忌','阿华田补满搅匀'],
+ '甜可可裹着酒香席卷入舌，甜蜜和烈酒的奇妙搭配。',2,'¥20',0],
+
+['蜜桃乌龙威士忌','whisky','苏格兰威士忌 1 : 蜜桃乌龙茶 3',
+ ['苏格兰威士忌 30ml','蜜桃乌龙茶 90ml','冰杯'],
+ ['冰杯加满冰','倒威士忌','蜜桃乌龙茶补满'],
+ '职场解压弹。威士忌的醇厚加茶的涩爽，一口提神，压力瞬间释放。',2,'¥22',0],
+
+['威士忌冰咖啡','whisky','威士忌 1 : 无糖冰咖啡 3',
+ ['威士忌 30ml','无糖冰咖啡 90ml','冰杯'],
+ ['冰杯加冰','倒威士忌','冰咖啡补满'],
+ '提神又微醺，加班党的双份快乐。咖啡选冷萃更顺口。',2,'¥20',0],
+
+['凉茶威士忌','whisky','王老吉 + 威士忌',
+ ['王老吉 1 罐','威士忌 40ml','冰杯'],
+ ['王老吉先喝掉三分之一','倒入威士忌','摇匀'],
+ 'emo 酒代表配接地气凉茶。入口是凉茶的甜，下一秒直接被威士忌带走。男士可入，女士慎选。',3,'¥18',0],
+
+['爱尔兰咖啡（便利店版）','whisky','威士忌 + 咖啡 + 百利甜',
+ ['威士忌 30ml','咖啡 90ml','百利甜 15ml'],
+ ['杯里倒威士忌和咖啡','搅匀','最后加一点百利甜添奶油尾韵'],
+ '威士忌让咖啡的花果香更浓郁，百利甜补上奶油尾韵，成年人的提神方式。',2,'¥30',0],
+
+['简易帕洛玛','tequila','龙舌兰 2 : 西柚汽水 3 + 盐边',
+ ['龙舌兰 40ml','西柚气泡水 60ml','青柠、粗盐','冰杯'],
+ ['杯口抹青柠汁，沾一圈粗盐','加满冰，倒龙舌兰','西柚气泡水补满'],
+ '比玛格丽特更清爽，在墨西哥本土其实更受欢迎。西柚的微苦是它的性格。',2,'¥25',0],
+
+['龙舌兰日出','tequila','龙舌兰 45ml + 橙汁 45ml + 石榴糖浆 2 茶匙',
+ ['龙舌兰 45ml','橙汁 45ml','石榴糖浆 2 茶匙','冰杯'],
+ ['冰杯加冰，倒入龙舌兰和橙汁搅匀','沿杯壁缓慢注入石榴糖浆','不要搅拌，让它自然沉底'],
+ '底部沉着的石榴糖浆就是日出。先喝到清冽的龙舌兰，最后喝到甜。',2,'¥25',0],
+
+['火锅局','fruit','真露 1 : 水溶 C 青柠 2',
+ ['真露烧酒 30ml','水溶 C 青柠 60ml','冰杯'],
+ ['冰杯加满冰','倒真露','水溶 C 补满搅匀'],
+ '水溶 C 的酸度盖住了烧酒的辣，回感清爽，吃火锅时来一杯刚刚好。',2,'¥18',1],
+
+['真露椰汁','fruit','真露 1 : 椰汁 3',
+ ['真露烧酒 30ml','椰汁 90ml','冰杯'],
+ ['冰杯加冰','倒真露','椰汁补满，搅匀'],
+ '口感变顺滑香甜，有点像在喝带酒精的椰奶，很治愈。',1,'¥20',0],
+
+['上头局','fruit','强爽 1 : 真露 1',
+ ['RIO 强爽 1 罐','真露烧酒 1 瓶','冰杯'],
+ ['冰杯加满冰','强爽和真露各倒一半','轻搅'],
+ '双倍酒精一秒上头，被网友叫做「高质量孟婆汤」。酒量不好千万别碰。',3,'¥22',0],
+
+['真露葡萄冰','fruit','真露 1 : 葡萄气泡水 1 + 葡萄棒冰',
+ ['真露烧酒 40ml','葡萄味元气森林 40ml','葡萄味棒冰 1 支','冰杯'],
+ ['冰杯取出大约一半的冰','把葡萄棒冰塞满整个杯子','倒真露','葡萄气泡水补满'],
+ '成人版葡萄汽水，颜值和口感都在线，夏天来一杯特别爽。',2,'¥24',0],
+
+['独酌局','fruit','梅见 1 : 雪碧 2（喜欢甜可以 1:1）',
+ ['梅见青梅酒 30ml','雪碧 60ml','冰杯'],
+ ['冰杯加满冰','倒梅见','雪碧补满'],
+ '酸甜气泡梅子饮，咕嘟咕嘟非常入口。加冰喝比常温好喝一个档次。',1,'¥20',1],
+
+['微醺局','fruit','青梅酒 1 : 乌龙茶 2',
+ ['青梅酒 40ml','三得利乌龙茶 80ml','冰杯'],
+ ['冰杯加冰','倒青梅酒','乌龙茶补满'],
+ '淡淡的梅子香加乌龙茶香，酒精度不高，清爽又解腻。',1,'¥22',0],
+
+['露营局','fruit','果立方 1 : 味全葡萄汁 2',
+ ['果立方 30ml','味全每日葡萄汁 60ml','冰杯'],
+ ['冰杯加冰','倒果立方','葡萄汁补满'],
+ '葡萄的香甜轻松盖住了高粱酒的苦涩，入口就是浓郁果味，装趴时最合适。',2,'¥20',1],
+
+['菜鸟局','fruit','果立方白桃 1 : 元气森林白桃 2',
+ ['果立方白桃 30ml','元气森林白桃气泡水 60ml','冰杯'],
+ ['冰杯加冰','倒果立方','白桃气泡水补满'],
+ '桃子全家桶。甜汽水会偷偷让你上头，但新手闭眼冲不会错。',1,'¥20',0],
+
+['坦白局','fruit','乌苏啤酒 1 : 果立方 2',
+ ['乌苏啤酒','果立方 60ml','冰杯'],
+ ['冰杯加冰','倒果立方','啤酒补满'],
+ '高粱酒加啤酒，后劲非常足。适合需要敞开心扉的深度谈话，量不好的别贪杯。',3,'¥18',0],
+
+['烤肉局','fruit','1664 啤酒 1 : 水溶西柚 1',
+ ['1664 白啤','水溶 C 西柚','冰杯'],
+ ['冰杯加满冰','啤酒和水溶 C 各倒一半','轻搅'],
+ '搭配起来像酒吧里的果啤，酸甜解腻。大口吃肉大口喝酒就是这个。',1,'¥18',0],
+
+['啤酒变果汁','fruit','1664 啤酒 1 : 果粒橙 1',
+ ['1664 白啤','果粒橙','冰杯'],
+ ['冰杯加冰','啤酒倒一半','果粒橙补满'],
+ '啤酒变成果汁感，苦味被橙子盖住了，适合不太爱啤酒苦味的人。',1,'¥18',0],
+
+['桃红桑格利亚','fruit','桃红葡萄酒 1 : 莓果果汁 2',
+ ['桃红葡萄酒 80ml','莓莓桃桃或葡萄汁 160ml','冰杯','水果丁（可选）'],
+ ['冰杯加冰','倒桃红葡萄酒','莓果果汁补满，加水果丁'],
+ '便利店能复刻八成桑格利亚。桃红不用醒酒，颜色好看，聚会摆出来最上镜。',1,'¥30',0],
+
+['失恋局','fruit','RIO 微醺白桃 + 3 颗话梅',
+ ['RIO 微醺白桃 1 罐','话梅 3 颗','冰杯'],
+ ['冰杯加满冰','倒 RIO 微醺','丢进 3 颗话梅，泡三分钟'],
+ '微甜里带着话梅的咸酸，像极了爱情的味道。需要一点酒精安慰的夜晚。',1,'¥12',0],
+
+['闺蜜局','liqueur','百利甜 1 : 旺仔牛奶 2',
+ ['百利甜 30ml','旺仔牛奶 60ml','冰杯'],
+ ['冰杯加冰','倒百利甜','旺仔牛奶补满搅匀'],
+ '成年人的奶茶。奶香浓郁酒感很弱；换成巧克力奶就是「酒心巧克力」。',1,'¥20',1],
+
+['成年人的奶茶','liqueur','百利甜 1 : 乌龙茶 3',
+ ['百利甜 15ml','三得利乌龙茶 45ml','冰杯'],
+ ['冰杯加冰','倒百利甜','乌龙茶补满'],
+ '百利的醇香浓搭配乌龙茶的清爽，睡前一杯刚好，奶茶党一定会喜欢。',1,'¥20',1],
+
+['可可百利甜','liqueur','百利甜 1 : 阿华田 1',
+ ['百利甜 30ml','阿华田特浓可可 30ml','冰杯'],
+ ['冰杯加冰','两份各倒一半','搅匀'],
+ '酒精味和甜味都降下去，奶油味浮上来，加上可可的丝滑，像在喝液体甜品。',1,'¥22',0],
+
+['椰汁百利甜','liqueur','百利甜 1 : 椰汁 4',
+ ['百利甜 30ml','椰汁 120ml','冰杯','椰片（可选）'],
+ ['冰杯倒入百利甜','加整盒椰汁，搅十秒','撒上椰片'],
+ '温柔醇厚，酒精感几乎为零，平时不喝酒的人也能试试。',1,'¥20',0],
+
+['甘露奶茶','liqueur','甘露咖啡力娇酒 + 旺仔牛奶 + 冰杯',
+ ['甘露咖啡力娇酒 30ml','旺仔牛奶 90ml','冰杯'],
+ ['冰杯加冰','倒甘露力娇酒','旺仔牛奶补满，搅匀'],
+ '丝滑的牛奶中和咖啡酒的醇苦，甜而不腻，像咬了一口咖啡奶糖。',1,'¥25',0],
+
+['求醉局','liqueur','野格 1 : 桃子气泡水 2',
+ ['野格 30ml','桃子气泡水 60ml','冰杯'],
+ ['冰杯加满冰','倒野格','桃子气泡水补满'],
+ '白桃气泡水的清爽盖住了野格的草药味，回味还有点甜。贪杯会醉。',3,'¥25',1],
+
+['兄弟局','liqueur','野格 1 : 红牛 2',
+ ['野格 30ml','红牛 60ml','冰块'],
+ ['杯里加冰','倒野格','红牛补满'],
+ '红牛和野格的草药味居然很搭，一杯精神到天亮。酒量不好的别轻易尝试。',3,'¥22',0],
+
+['可乐野格','liqueur','野格 1 : 可乐 2',
+ ['野格 30ml','可乐 60ml','冰块'],
+ ['杯里加冰','倒野格','可乐补满'],
+ '咳嗽糖浆般的野格味道很霸道，汽水的刺激让它多了很多趣味。甜度很高。',3,'¥20',0],
+
+['约会局','liqueur','RIO 水蜜桃 1 : RIO 微醺 1',
+ ['RIO 水蜜桃 1 罐','RIO 微醺 1 罐','冰杯'],
+ ['冰杯加满冰','两罐各倒一半','轻搅'],
+ '双倍桃汁的快乐，甜甜的果味加气泡，不会喝酒的姐妹也能轻松驾驭。',1,'¥16',0],
+
+['新手局','liqueur','RIO 微醺葡萄 1 : 葡萄汁 2',
+ ['RIO 微醺葡萄 1 罐','葡萄汁 120ml','冰杯'],
+ ['冰杯加冰','倒 RIO 微醺','葡萄汁补满'],
+ '果味浓郁、酒味淡淡，葡萄控闭眼冲，适合第一次尝试调酒的人。',1,'¥18',0],
+
+['富士山下','liqueur','蓝色锐澳 + 冰杯 + 一勺稠酸奶',
+ ['蓝色锐澳 1 罐','浓稠酸奶 2 勺','冰杯'],
+ ['蓝色锐澳倒进冰杯','顶部慢慢点上酸奶或奶油','插一根吸管，先拍照'],
+ '蓝色酒液像一片冰海，顶上一点白，冷冽的故事感。颜值第一名。',1,'¥20',0],
+
+['少女时代','liqueur','粉红草莓利口酒 + 元气森林 + 薄荷叶',
+ ['粉色奶油草莓利口酒 40ml','元气森林气泡水','薄荷叶','冰杯'],
+ ['冰杯倒利口酒，加满冰','元气森林补满','点一片薄荷叶'],
+ '甜酷加倍，冰杯里的一片粉，气泡上升的过程非常上镜。',1,'¥24',0],
+
+['平替伯牙绝弦','zero','茉莉花茶 + 旺仔牛奶 + 冰杯',
+ ['农夫山泉茉莉花茶','旺仔牛奶','冰杯'],
+ ['冰杯加满冰','茉莉花茶倒一半','旺仔牛奶补满'],
+ '三块钱的冰杯配便利店牛奶，奶茶店平替。想再浓一点就多倒奶。',0,'¥10',0],
+
+['生椰拿铁','zero','椰子水 + 浓缩咖啡液 + 冰杯',
+ ['椰子水 150ml','浓缩咖啡液 1 颗','冰杯'],
+ ['冰杯加满冰','倒椰子水','淋上咖啡液，形成分层'],
+ '低成本冰美式的亲戚，比店里便宜一半。搅开或分层喝都行。',0,'¥12',0],
+
+['西瓜养乐多冰沙','zero','冻西瓜块 + 养乐多 2 瓶',
+ ['西瓜块 200g','养乐多 2 瓶'],
+ ['西瓜切块去籽，冷冻 4 小时','冻西瓜块加养乐多放进榨汁机','打成冰沙状'],
+ '成本不到五块，外面至少卖二十五。夏天最省事的一杯。',0,'¥8',0],
+
+['百香果青柠气泡','zero','百香果 1 个 + 青柠半个 + 无糖气泡水',
+ ['百香果 1 个','青柠半个','无糖气泡水','蜂蜜 1 勺','冰块'],
+ ['百香果挖出果肉放杯底','青柠切片放入，加一勺蜂蜜','倒气泡水，加满冰'],
+ '想清爽又怕胖就选它。酸味水果加蜂蜜加气泡水，是万能的无酒精组合。',0,'¥10',0]
+];
+
+/* Fixed atlas order (left to right, top to bottom), independent of filtering. */
+var SPRITE_NAMES = [
+  '柠檬茶伏特加', '绝对日落', '占有欲', '想念', '螺丝起子', '莓桃伏特加',
+  '伏特加梦龙', '养乐多伏特加', '自由古巴', '简易莫吉托', '迈阿密海滩', '想见你',
+  '烧烤局', '椰林飘香', '葡萄乌龙朗姆', '简易金汤力', '柠檬气泡水金酒', '茉莉乌龙金酒',
+  '葡萄小甜水', '橙汁汽水金酒', '可乐桶', '冻龄威士忌茶', '嗨棒（放松局）', '威士忌椰子水',
+  '威士忌阿华田', '蜜桃乌龙威士忌', '威士忌冰咖啡', '凉茶威士忌', '爱尔兰咖啡（便利店版）', '简易帕洛玛',
+  '龙舌兰日出', '火锅局', '真露椰汁', '上头局', '真露葡萄冰', '独酌局',
+  '微醺局', '露营局', '菜鸟局', '坦白局', '烤肉局', '啤酒变果汁',
+  '桃红桑格利亚', '失恋局', '闺蜜局', '成年人的奶茶', '可可百利甜', '椰汁百利甜',
+  '甘露奶茶', '求醉局', '兄弟局', '可乐野格', '约会局', '新手局',
+  '富士山下', '少女时代', '平替伯牙绝弦', '生椰拿铁', '西瓜养乐多冰沙', '百香果青柠气泡'
+];
+function drinkArt(name){
+  var index = SPRITE_NAMES.indexOf(name);
+  if(index < 0){ return ''; }
+  var x = (index % 6) * 100 / 5;
+  var y = Math.floor(index / 6) * 100 / 9;
+  return '<span class="drink-art" role="img" aria-label="' + name + ' · AI 配图示意" style="background-position:' + x + '% ' + y + '%"></span>';
+}
+
+/* ---------- state ---------- */
+var state = {cat:'all', q:'', favs:{}};
+try { state.favs = JSON.parse(localStorage.getItem('cv_favs') || '{}') || {}; } catch(e){ state.favs = {}; }
+
+var CAT_KEYS = ['all'].concat(Object.keys(CATS));
+var grid = document.getElementById('grid');
+var qEl = document.getElementById('q');
+var clrEl = document.getElementById('clr');
+var cntEl = document.getElementById('cnt');
+var chipsEl = document.getElementById('chips');
+var emptyEl = document.getElementById('empty');
+var sheet = document.getElementById('sheet');
+var bd = document.getElementById('bd');
+
+/* ---------- chips ---------- */
+function buildChips(){
+  var h = '';
+  CAT_KEYS.forEach(function(k){
+    var label = k === 'all' ? '全部' : CATS[k].n;
+    if(k === 'all'){ label = '全部 ' + R.length; }
+    h += '<button class="chip' + (state.cat===k?' on':'') + '" data-k="' + k + '">' + label + '</button>';
+  });
+  var favN = Object.keys(state.favs).filter(function(i){return state.favs[i]}).length;
+  h += '<button class="chip' + (state.cat==='fav'?' on':'') + '" data-k="fav">♡ 收藏' + (favN?' '+favN:'') + '</button>';
+  chipsEl.innerHTML = h;
+}
+
+/* ---------- render ---------- */
+function match(item){
+  if(state.cat === 'fav'){ return !!state.favs[item[0]]; }
+  if(state.cat !== 'all' && item[1] !== state.cat){ return false; }
+  if(!state.q){ return true; }
+  var hay = (item[0] + item[2] + item[3].join('') + item[5] + CATS[item[1]].n).toLowerCase();
+  return hay.indexOf(state.q) !== -1;
+}
+
+function lvHtml(n, c){
+  if(!n){ return '<span class="lv"><i class="f" style="background:' + c + '"></i></span>'; }
+  var s = '<span class="lv">';
+  for(var i=0;i<3;i++){ s += '<i class="' + (i<n?'f':'') + '" style="' + (i<n?'background:'+c:'' ) + '"></i>'; }
+  return s + '</span>';
+}
+
+function render(){
+  var list = R.filter(match);
+  var h = '';
+  list.forEach(function(item, idx){
+    var name = item[0], cat = item[1], ratio = item[2], taste = item[5], lv = item[6], price = item[7], hot = item[8];
+    var c = CATS[cat].c;
+    var tags = '';
+    if(hot){ tags += '<span class="tag hot">热门</span>'; }
+    if(lv === 0){ tags += '<span class="tag easy">无酒精</span>'; }
+    else if(lv === 1){ tags += '<span class="tag easy">新手友好</span>'; }
+    else if(lv === 3){ tags += '<span class="tag warn">上头预警</span>'; }
+    var fav = state.favs[name] ? ' on' : '';
+    h += '<article class="card" data-n="' + name + '" style="--c:' + c + ';animation-delay:' + Math.min(idx*22,440) + 'ms">'
+      +  '<button class="fav' + fav + '" data-fav="' + name + '" aria-label="收藏">'
+      +  '<svg viewBox="0 0 24 24"><path d="M12 20.7l-1.4-1.3C5.4 14.8 2 11.7 2 7.9 2 4.9 4.4 2.5 7.4 2.5c1.7 0 3.3.8 4.6 2.1 1.3-1.3 2.9-2.1 4.6-2.1 3 0 5.4 2.4 5.4 5.4 0 3.8-3.4 6.9-8.6 11.5L12 20.7z"/></svg>'
+      +  '</button>'
+      +  '<div class="card-h">' + drinkArt(name) + '<div class="card-title"><div class="nm"><h3>' + name + '</h3></div>' + lvHtml(lv, c) + '</div></div>'
+      +  '<p class="ratio">' + ratio + '</p>'
+      +  '<p class="taste">' + taste + '</p>'
+      +  '<div class="card-f">' + tags + '<button class="cart-add" data-add-cart="' + name + '" aria-label="将' + name + '加入购物车">＋ 加入</button><span class="price">' + price + '</span></div>'
+      +  '</article>';
+  });
+  grid.innerHTML = h;
+  emptyEl.style.display = list.length ? 'none' : 'block';
+  var label = state.cat === 'fav' ? '收藏' : (state.cat === 'all' ? '全部配方' : CATS[state.cat].n);
+  cntEl.textContent = label + ' · ' + list.length + ' 款';
+  document.getElementById('hint').textContent = state.cat === 'fav' && !list.length ? '还没收藏' : '点卡片看步骤';
+}
+
+/* ---------- sheet ---------- */
+var curName = null;
+function openSheet(name){
+  var item = null;
+  for(var i=0;i<R.length;i++){ if(R[i][0] === name){ item = R[i]; break; } }
+  if(!item){ return; }
+  sheet.classList.remove('cart-open');
+  sheet.setAttribute('aria-label', name + '配方');
+  curName = name;
+  var c = CATS[item[1]].c;
+  var lvTxt = item[6] === 0 ? '无酒精' : (item[6] === 1 ? '酒感很轻' : (item[6] === 2 ? '中等酒劲' : '后劲较足'));
+  var ing = item[3].map(function(x){ return '<li>' + x + '</li>'; }).join('');
+  var steps = item[4].map(function(x){ return '<li>' + x + '</li>'; }).join('');
+  document.getElementById('sheetBody').innerHTML =
+      '<div class="sheet-hero" style="--c:' + c + '">'
+    +   drinkArt(item[0])
+    +   '<h3>' + item[0] + '</h3>'
+    +   '<span class="cat">' + CATS[item[1]].n + '</span>'
+    +   '<p class="rt">' + item[2] + '</p>'
+    +   '<p class="tt">' + item[5] + '</p>'
+    +   '<div class="pills">'
+    +     '<span class="tag">' + lvTxt + '</span>'
+    +     '<span class="tag">单杯约 ' + item[7] + '</span>'
+    +     (item[8] ? '<span class="tag hot">全网红款</span>' : '')
+    +   '</div>'
+    + '</div>'
+    + '<h4>材料</h4><ul class="ing">' + ing + '</ul>'
+    + '<h4>做法</h4><ol>' + steps + '</ol>'
+    + '<div class="note">冰杯先加满冰，基酒最后倒。调完即时喝，冰化完风味就垮了。</div>'
+    + '<div class="sheet-actions">'
+    +   '<button class="pri" id="addCartBtn">＋ 加入购物车</button>'
+    +   '<button id="favBtn">' + (state.favs[name] ? '♥ 已收藏' : '♡ 收藏这杯') + '</button>'
+    +   '<button class="pri" id="nextBtn">再来一杯</button>'
+    + '</div>';
+  document.getElementById('addCartBtn').onclick = function(){ addToCart(name); };
+  document.getElementById('favBtn').onclick = function(){
+    state.favs[name] = !state.favs[name];
+    try { localStorage.setItem('cv_favs', JSON.stringify(state.favs)); } catch(e){}
+    this.textContent = state.favs[name] ? '♥ 已收藏' : '♡ 收藏这杯';
+    buildChips(); render();
+  };
+  document.getElementById('nextBtn').onclick = function(){ closeSheet(); setTimeout(randomPick, 180); };
+  sheet.classList.add('on'); bd.classList.add('on');
+  document.body.classList.add('lock');
+  sheet.scrollTop = 0;
+}
+function closeSheet(){
+  sheet.classList.remove('on'); bd.classList.remove('on');
+  document.body.classList.remove('lock');
+}
+function randomPick(){
+  var pool = R.filter(match);
+  if(!pool.length){ pool = R; }
+  openSheet(pool[Math.floor(Math.random()*pool.length)][0]);
+}
+
+/* ---------- events ---------- */
+grid.addEventListener('click', function(e){
+  var add = e.target.closest('[data-add-cart]');
+  if(add){ addToCart(add.getAttribute('data-add-cart')); return; }
+  var favBtn = e.target.closest('[data-fav]');
+  if(favBtn){
+    e.stopPropagation();
+    var n = favBtn.getAttribute('data-fav');
+    state.favs[n] = !state.favs[n];
+    try { localStorage.setItem('cv_favs', JSON.stringify(state.favs)); } catch(err){}
+    favBtn.classList.toggle('on', !!state.favs[n]);
+    buildChips();
+    return;
+  }
+  var card = e.target.closest('.card');
+  if(card){ openSheet(card.getAttribute('data-n')); }
+});
+chipsEl.addEventListener('click', function(e){
+  var b = e.target.closest('.chip');
+  if(!b){ return; }
+  state.cat = b.getAttribute('data-k');
+  buildChips(); render();
+  window.scrollTo({top:Math.max(0, document.querySelector('.toolbar').offsetTop - 4), behavior:'smooth'});
+});
+qEl.addEventListener('input', function(){
+  state.q = qEl.value.trim().toLowerCase();
+  clrEl.classList.toggle('on', !!qEl.value);
+  render();
+});
+clrEl.addEventListener('click', function(){
+  qEl.value = ''; state.q = ''; clrEl.classList.remove('on'); render(); qEl.focus();
+});
+bd.addEventListener('click', closeSheet);
+document.getElementById('rand').addEventListener('click', randomPick);
+document.getElementById('toTop').addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+window.addEventListener('scroll', function(){
+  document.getElementById('toTop').classList.toggle('on', window.scrollY > 500);
+}, {passive:true});
+
+/* ---------- count up ---------- */
+function countUp(el, target, suffix){
+  var done = false;
+  function finish(){ if(!done){ done = true; el.textContent = target + suffix; } }
+  var t0 = null, dur = 900;
+  function step(ts){
+    if(done){ return; }
+    if(!t0){ t0 = ts; }
+    var p = Math.min((ts - t0)/dur, 1);
+    var e = 1 - Math.pow(1-p, 3);
+    el.textContent = Math.round(target*e) + suffix;
+    if(p < 1){ requestAnimationFrame(step); } else { done = true; }
+  }
+  requestAnimationFrame(step);
+  setTimeout(finish, 1400);
+}
+countUp(document.getElementById('s1'), R.length, '');
+countUp(document.getElementById('s2'), 3, '');
+countUp(document.getElementById('s3'), 30, '');
+
+buildChips();
+render();
+</script>
+<div class="cart-toast" id="cartToast" role="status" aria-live="polite"></div>
+<script src="cart.js"></script>
+</body>
+</html>
