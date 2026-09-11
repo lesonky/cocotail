@@ -2,7 +2,7 @@
 
 60 款便利店调酒配方速查，支持分类搜索、收藏、虚拟购物车和采购清单。
 
-网站：https://lesonky.github.io/cocotail/
+网站：https://www.200jin.cn/cocotail/
 
 纯 HTML、CSS、JavaScript，无构建依赖。GitHub Pages 从 main 分支根目录发布。
 
