@@ -64,7 +64,7 @@ function renderCart(){
   if(!names.length){
     html+='<div class="cart-empty">还没有想调的饮品<br><small>选一杯加入，就能生成采购清单。</small></div><div class="sheet-actions"><button class="pri" data-cart-close>去挑选饮品</button></div>';
   }else{
-    html+='<p class="cart-summary">'+names.length+' 款饮品 · '+total+' 杯</p>';
+    html+='<div class="cart-toolbar"><p class="cart-summary">'+names.length+' 款饮品 · '+total+' 杯</p><button class="cart-clear" data-cart-clear>清空购物车</button></div>';
     names.forEach(function(r){
       var n=escapeCart(r[0]);
       html+='<div class="cart-row">'+drinkArt(r[0])+'<div class="cart-name">'+n+'<button class="cart-remove" data-cart-remove="'+n+'" aria-label="移除'+n+'">移除</button></div><div class="cart-qty"><button data-cart-delta="-1" data-cart-name="'+n+'" aria-label="'+n+'减少一杯"'+(cart[r[0]]===1?' disabled':'')+'>−</button><output aria-label="杯数">'+cart[r[0]]+'</output><button data-cart-delta="1" data-cart-name="'+n+'" aria-label="'+n+'增加一杯"'+(cart[r[0]]===99?' disabled':'')+'>＋</button></div></div>';
@@ -96,6 +96,11 @@ document.getElementById('cartBtn').addEventListener('click',openCart);
 document.getElementById('sheetBody').addEventListener('click',function(e){
   if(!sheet.classList.contains('cart-open')){return;}
   if(e.target.closest('[data-cart-close]')){closeSheet();document.getElementById('cartBtn').focus();return;}
+  if(e.target.closest('[data-cart-clear]')){
+    cart={};bought={};saveCart();renderCart();sheet.scrollTop=0;
+    sheet.querySelector('[data-cart-close]').focus({preventScroll:true});
+    return;
+  }
   var remove=e.target.closest('[data-cart-remove]'), delta=e.target.closest('[data-cart-delta]');
   if(!remove&&!delta){return;}
   var name=remove?remove.getAttribute('data-cart-remove'):delta.getAttribute('data-cart-name');
