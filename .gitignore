@@ -1,3 +1,5 @@
 .DS_Store
+.workbuddy/
 docs/
 assets/*.md
+scripts/drinks.json
